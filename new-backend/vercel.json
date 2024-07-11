@@ -2,7 +2,9 @@
   "version": 2,
   "functions": {
     "api/*.js": {
-      "includeFiles": "node_modules/sqlite3/**/*"
+      "includeFiles": [
+        "node_modules/sqlite3/**/*" 
+      ]
     }
   },
   "builds": [
@@ -13,7 +15,7 @@
   ],
   "routes": [
     {
-      "src": "/api/(.*)", 
+      "src": "/api/(.*)",
       "dest": "/index.js" 
     },
     { 
