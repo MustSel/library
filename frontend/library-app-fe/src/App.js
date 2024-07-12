@@ -12,7 +12,7 @@ const App = () => {
 
   const fetchBooks = async () => {
     try {
-      const response = await axios.get('https://myfirstlibrary-backend.vercel.app/');
+      const response = await axios.get('https://library-backend-eosin.vercel.app/api/books/');
       setBooks(response.data.result.rows);
     } catch (error) {
       console.error('Error fetching books:', error);
@@ -51,9 +51,9 @@ const App = () => {
     if (!validateForm()) return;
     try {
       if (isEdit) {
-        await axios.put(`https://myfirstlibrary-backend.vercel.app/${currentBook.id}`, currentBook);
+        await axios.put(`https://library-backend-eosin.vercel.app/api/books/${currentBook.id}`, currentBook);
       } else {
-        await axios.post('https://myfirstlibrary-backend.vercel.app/', currentBook);
+        await axios.post('https://library-backend-eosin.vercel.app/api/books/', currentBook);
       }
       fetchBooks();
       handleClose();
@@ -64,7 +64,7 @@ const App = () => {
 
   const handleDelete = async (id) => {
     try {
-      await axios.delete(`https://myfirstlibrary-backend.vercel.app/${id}`);
+      await axios.delete(`https://library-backend-eosin.vercel.app/api/books/${id}`);
       fetchBooks();
     } catch (error) {
       console.error('Error deleting book:', error);
