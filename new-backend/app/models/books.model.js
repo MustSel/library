@@ -3,42 +3,54 @@
     EXPRESSJS - LIBRARY Project with Sequelize
 ------------------------------------------------------- */
 
-const {Sequelize, DataTypes} = require('sequelize')
+const { Sequelize, DataTypes } = require('sequelize');
 
-const sequelize = new Sequelize('sqlite:./db.sqlite3')
+const sequelize = new Sequelize(process.env.POSTGRES_URL, {
+    dialect: 'postgres',
+    protocol: 'postgres',
+    dialectOptions: {
+      ssl: {
+        require: true,
+        rejectUnauthorized: false 
+      }
+    },
+    dialectModule: require('pg')
+  });
 
 const Library = sequelize.define('Books', {
-    title:{
-        type: DataTypes.STRING(256), 
+    title: {
+        type: DataTypes.STRING(256),
         allowNull: false
-    }, //varchar
-    author:{
-        type: DataTypes.STRING(256), 
+    },
+    author: {
+        type: DataTypes.STRING(256),
         allowNull: false
-    }, //varchar
+    },
     ISBN: {
-        type: DataTypes.INTEGER,
+        type: DataTypes.STRING(20), // Veya DataTypes.BIGINT
         unique: true
-    }, // varchar
-    genre:{
-        type: DataTypes.STRING(256), 
+    },
+    genre: {
+        type: DataTypes.STRING(256),
         allowNull: false
-    }, // varchar
-    publicationYear:{
-        type: DataTypes.INTEGER, 
+    },
+    publicationYear: {
+        type: DataTypes.INTEGER,
         allowNull: false
-    }, //year
+    },
     image: {
-        type: DataTypes.TEXT, 
+        type: DataTypes.TEXT,
         allowNull: false
-    }// text
-})
+    }
+});
 
+(async () => {
+  await sequelize.sync({ alter: true }); // Tabloyu günceller, yoksa oluşturur
+})();
 
-// sequelize.sync({alter:true})
-
-sequelize.authenticate()
+sequelize
+    .authenticate()
     .then(() => console.log('* DB Connected *'))
-    .catch(() => console.log('* DB Not Connected *'))
+    .catch(err => console.log('* DB Not Connected *', err)); // Hata mesajını konsola yazdırın
 
-module.exports = Library
+module.exports = Library;
